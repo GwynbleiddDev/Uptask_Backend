@@ -4,7 +4,8 @@ import { Types } from 'mongoose';
 
 
 type NoteParams = {
-  noteId: Types.ObjectId
+  // noteId: Types.ObjectId
+  noteId: string
 }
 
 
@@ -15,7 +16,7 @@ export class NoteController {
     
     const note = new Note()
     note.content = content
-    note.createdBy = req.user._id
+    note.createdBy = req.user!._id
     note.task = req.task.id
 
     req.task.notes.push(note.id)
@@ -51,7 +52,7 @@ export class NoteController {
       return
     }
 
-    if(note.createdBy.toString() !== req.user._id.toString()) {
+    if(note.createdBy.toString() !== req.user!._id.toString()) {
       const error = new Error('No tienes permisos para eliminar esta nota')
       res.status(403).json({message: error.message})
       return

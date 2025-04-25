@@ -54,7 +54,7 @@ export function hasAuthorization(
   res: Response, 
   next: NextFunction) {
     
-  if( req.user.id.toString() !== req.project.manager.toString() ) {
+  if( req.user!.id.toString() !== req.project.manager!.toString() ) {
     const error = new Error('Accion solo valida para el manager')
     res.status(400).json({error: error.message})
     return

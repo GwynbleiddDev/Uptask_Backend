@@ -26,7 +26,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
   const [, token] = bearer.split(' ')
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!)
 
     if(typeof decoded === 'object' && decoded.id) {
       

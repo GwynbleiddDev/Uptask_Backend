@@ -26,7 +26,7 @@ export class TeamMemberController {
       select: 'id name email'
     })
 
-    res.json(project.team)
+    res.json(project!.team)
   }
 
 
@@ -42,7 +42,7 @@ export class TeamMemberController {
       return 
     }
 
-    if(req.project.team.some(team => team.id.toString() === user.id.toString())) {
+    if(req.project.team.some(team => team!.id.toString() === user.id.toString())) {
       const error = new Error('El usuario ya pertenece al proyecto')
       res.status(409).json({ error: error.message })
       return
@@ -60,13 +60,13 @@ export class TeamMemberController {
 
     const { userId } = req.params
 
-    if(!req.project.team.some(team => team.toString() === userId)) {
+    if(!req.project.team.some(team => team!.toString() === userId)) {
       const error = new Error('El usuario no pertenece al proyecto')
       res.status(409).json({ error: error.message })
       return
     }
 
-    req.project.team = req.project.team.filter( teamMember => teamMember.toString() !== userId )
+    req.project.team = req.project.team.filter( teamMember => teamMember!.toString() !== userId )
 
     await req.project.save()
 

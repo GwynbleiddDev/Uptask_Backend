@@ -9,7 +9,7 @@ export class ProjectController {
     const project = new Project(req.body)
 
     // Asignar manager
-    project.manager = req.user.id
+    project.manager = req.user!.id
 
     try {
       await project.save()
@@ -25,8 +25,8 @@ export class ProjectController {
     try {
       const projects = await Project.find({
         $or: [
-          {manager: {$in: req.user.id}},
-          {team: {$in: req.user.id}}
+          {manager: {$in: req.user!.id}},
+          {team: {$in: req.user!.id}}
         ]
       })
       res.json(projects)
@@ -46,7 +46,7 @@ export class ProjectController {
         return
       }
 
-      if(project.manager.toString() !== req.user.id.toString() && !project.team.includes(req.user.id)) {
+      if(project.manager!.toString() !== req.user!.id.toString() && !project.team.includes(req.user!.id)) {
         const error = new Error('Acción no Válida')
         res.status(404).json({error: error.message})
         return

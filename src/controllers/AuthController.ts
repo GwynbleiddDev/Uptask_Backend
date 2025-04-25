@@ -61,9 +61,9 @@ export class AuthController {
       }
 
       const user = await User.findById(tokenExist.user)
-      user.confirmed = true
+      user!.confirmed = true
       
-      await Promise.allSettled([ user.save(), tokenExist.deleteOne() ])
+      await Promise.allSettled([ user!.save(), tokenExist.deleteOne() ])
       res.send('Cuenta confirmada correctamente')
       
     } catch (error) {
@@ -221,9 +221,9 @@ export class AuthController {
         return
       }
       const user = await User.findById(tokenExists.user)
-      user.password = await hashPassword(password)
+      user!.password = await hashPassword(password)
 
-      await Promise.allSettled([user.save(), tokenExists.deleteOne()]) 
+      await Promise.allSettled([user!.save(), tokenExists.deleteOne()]) 
 
       res.send('El password se modificó correctamente')
       
@@ -244,17 +244,17 @@ export class AuthController {
 
     const userExists = await User.findOne({email})
     
-    if(userExists && userExists.id.toString() !== req.user.id.toString()) {
+    if(userExists && userExists.id.toString() !== req.user!.id.toString()) {
       const error = new Error('Email ya registrado')
       res.status(409).json({error: error.message})
       return
     }
 
-    req.user.name = name
-    req.user.email = email
+    req.user!.name = name
+    req.user!.email = email
 
     try {
-      await req.user.save()
+      await req.user!.save()
       res.send('Perfil actualizado correctamente')
     } catch (error) {
       res.status(500).send('Hubo un error')
@@ -267,9 +267,9 @@ export class AuthController {
     const { current_password, password } = req.body
 
     // const user = await User.findOne(req.user.id) 
-    const user = await User.findOne({_id: req.user.id}) // encerrar en objeto e identificar el id con el req.user
+    const user = await User.findOne({_id: req.user!.id}) // encerrar en objeto e identificar el id con el req.user
 
-    const isPasswordCorrect = await checkPassword(current_password, user.password)
+    const isPasswordCorrect = await checkPassword(current_password, user!.password)
     
     if(!isPasswordCorrect) {
       const error = new Error('Password actual incorrecto')
@@ -278,8 +278,8 @@ export class AuthController {
     }
 
     try {
-      user.password = await hashPassword(password)
-      await user.save()
+      user!.password = await hashPassword(password)
+      await user!.save()
       res.send('Password actualizado correctamente')
     } catch (error) {
       res.status(500).send('Hubo un error')
@@ -291,9 +291,9 @@ export class AuthController {
 
     const { password } = req.body
 
-    const user = await User.findOne({_id: req.user.id}) // encerrar en objeto e identificar el id con el req.user
+    const user = await User.findOne({_id: req.user!.id}) // encerrar en objeto e identificar el id con el req.user
 
-    const isPasswordCorrect = await checkPassword(password, user.password)
+    const isPasswordCorrect = await checkPassword(password, user!.password)
     
     if(!isPasswordCorrect) {
       const error = new Error('Password actual incorrecto')

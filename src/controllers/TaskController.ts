@@ -56,7 +56,7 @@ export class TaskController {
     
     try {
       req.project.tasks = req.project.tasks.filter( 
-        task => task.toString() !== req.task.id.toString()
+        task => task!.toString() !== req.task.id.toString()
       )
       await Promise.allSettled([ req.task.deleteOne(), req.project.save() ])
       res.send('Tarea Eliminada Correctamente')
@@ -73,7 +73,7 @@ export class TaskController {
       req.task.status = status
 
       const data = {
-        user: req.user.id,
+        user: req.user!.id,
         status
       }
 

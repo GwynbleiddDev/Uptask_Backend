@@ -11,8 +11,7 @@ export const handleInputErrors = (
   
   if(!errors.isEmpty()) {
     res.status(400).json( {errors: errors.array()} )
-    return
   }
   next()
-  return;
+  return Promise.resolve()
 }
