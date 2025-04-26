@@ -42,8 +42,14 @@ export class TeamMemberController {
       return 
     }
 
-    if(req.project.team.some(team => team!.id.toString() === user.id.toString())) {
+    if( req.project.team.some(team => team!.id.toString() === user.id.toString())) {
       const error = new Error('El usuario ya pertenece al proyecto')
+      res.status(409).json({ error: error.message })
+      return
+    }
+
+    if ( req.project.manager!.toString() === user.id.toString()) {
+      const error = new Error('El usuario que está intentando agregar es el manager del proyecto')
       res.status(409).json({ error: error.message })
       return
     }
