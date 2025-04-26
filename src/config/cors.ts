@@ -1,20 +1,23 @@
-import { CorsOptions } from 'cors'
-
+import { CorsOptions } from 'cors';
 
 export const corsConfig: CorsOptions = {
   
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
+    
+    const whitelist = [process.env.FRONTEND_URL];
 
-    const whitelist = [process.env.FRONTEND_URL]
-
-    if(process.argv[2] === '--api') {
-      whitelist.push(undefined)
+    if (process.env.NODE_ENV !== 'production') {
+      whitelist.push(undefined);
     }
 
-    if(whitelist.includes(origin)) {
-      callback(null, true)
+    if (whitelist.includes(origin)) {
+      callback(null, true);
     } else {
-      callback(new Error('Error de Cors'))
+      console.error(`CORS error: Origin ${origin} not allowed. Whitelist: ${whitelist}`);
+      callback(new Error('Error de CORS: Origen no permitido'));
     }
-  }
-}
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // Si usas tokens en headers
+};
