@@ -4,7 +4,7 @@ export const corsConfig: CorsOptions = {
   
   origin: function (origin, callback) {
     
-    const whitelist = [process.env.FRONTEND_URL];
+    const whitelist = [process.env.FRONTEND_URL, undefined];
 
     if (process.env.NODE_ENV !== 'production') {
       whitelist.push(undefined);
@@ -13,7 +13,7 @@ export const corsConfig: CorsOptions = {
     if (whitelist.includes(origin)) {
       callback(null, true);
     } else {
-      console.error(`CORS error: Origin ${origin} not allowed. Whitelist: ${whitelist}`);
+      console.error(`CORS error: Origin ${origin || 'undefined'} not allowed. Whitelist: ${whitelist}`);
       callback(new Error('Error de CORS: Origen no permitido'));
     }
   },
